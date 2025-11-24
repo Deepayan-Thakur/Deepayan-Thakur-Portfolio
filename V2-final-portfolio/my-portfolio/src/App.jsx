@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
-import { Github, Linkedin, Mail, ExternalLink, ChevronDown, Cpu, Shield, Activity, Database, Terminal, Code2, Menu, X, Play } from 'lucide-react';
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
+import { Github, Linkedin, Mail, ExternalLink, ChevronDown, Cpu, Shield, Activity, Terminal, Menu, X, Play, Leaf } from 'lucide-react';
 
-// --- DATA SOURCE (From CV & GitHub) ---
+// --- DATA SOURCE ---
 const PORTFOLIO_DATA = {
   personal: {
     name: "Deepayan Thakur",
@@ -81,6 +81,118 @@ const PORTFOLIO_DATA = {
     "Python", "Deep Learning", "CNNs", "Computer Vision",
     "Java", "SQL", "Android Dev", "Data Science", "React"
   ]
+};
+
+// --- LEAF CURTAIN PRELOADER ---
+const LeafPreloader = ({ onComplete }) => {
+  const [exit, setExit] = useState(false);
+
+  useEffect(() => {
+    // Wait for 2.5 seconds then start the curtain opening
+    const timer = setTimeout(() => {
+      setExit(true);
+      // Allow animation to finish before removing component
+      setTimeout(onComplete, 1500); 
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  // Generate random leaves configuration
+  const generateLeaves = (count) => {
+    return Array.from({ length: count }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 100, // %
+      y: Math.random() * 100, // %
+      rotation: Math.random() * 360,
+      scale: 0.5 + Math.random() * 1.5,
+      delay: Math.random() * 2,
+      color: Math.random() > 0.5 ? "text-emerald-600" : "text-green-800"
+    }));
+  };
+
+  const leavesLeft = useRef(generateLeaves(15)).current;
+  const leavesRight = useRef(generateLeaves(15)).current;
+
+  const curtainTransition = { duration: 1.2, ease: [0.76, 0, 0.24, 1] };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex pointer-events-none">
+      {/* Left Curtain */}
+      <motion.div
+        initial={{ x: "0%" }}
+        animate={exit ? { x: "-100%" } : { x: "0%" }}
+        transition={curtainTransition}
+        className="w-1/2 h-full bg-green-950 relative overflow-hidden shadow-2xl"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-green-900/40 to-black/80"></div>
+        {leavesLeft.map((leaf) => (
+          <motion.div
+            key={leaf.id}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ 
+              opacity: [0, 1, 1], 
+              scale: [0, leaf.scale, leaf.scale],
+              rotate: [leaf.rotation, leaf.rotation + 10, leaf.rotation - 10, leaf.rotation]
+            }}
+            transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+            className={`absolute ${leaf.color}`}
+            style={{ left: `${leaf.x}%`, top: `${leaf.y}%` }}
+          >
+            <Leaf size={40} fill="currentColor" className="opacity-60" />
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Right Curtain */}
+      <motion.div
+        initial={{ x: "0%" }}
+        animate={exit ? { x: "100%" } : { x: "0%" }}
+        transition={curtainTransition}
+        className="w-1/2 h-full bg-green-950 relative overflow-hidden shadow-2xl"
+      >
+        <div className="absolute inset-0 bg-gradient-to-bl from-green-900/40 to-black/80"></div>
+        {leavesRight.map((leaf) => (
+          <motion.div
+            key={leaf.id}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ 
+              opacity: [0, 1, 1], 
+              scale: [0, leaf.scale, leaf.scale],
+              rotate: [leaf.rotation, leaf.rotation - 10, leaf.rotation + 10, leaf.rotation]
+            }}
+            transition={{ duration: 2, delay: 0.2, repeat: Infinity, repeatType: "reverse" }}
+            className={`absolute ${leaf.color}`}
+            style={{ left: `${leaf.x}%`, top: `${leaf.y}%` }}
+          >
+            <Leaf size={40} fill="currentColor" className="opacity-60" />
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Center Text (Fades out before curtains open) */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={exit ? { opacity: 0, scale: 1.5 } : { opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+      >
+        <div className="text-center">
+            <motion.div 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="mb-4"
+            >
+                <Leaf size={64} className="text-emerald-500 mx-auto animate-pulse" />
+            </motion.div>
+            <h1 className="text-4xl md:text-6xl font-bold text-white tracking-widest font-mono">
+              I Welcome You
+            </h1>
+            <p className="text-emerald-500 mt-2 font-mono text-sm">To My Portfolio... 🍃</p>
+        </div>
+      </motion.div>
+    </div>
+  );
 };
 
 // --- VISUAL COMPONENTS ---
@@ -308,7 +420,7 @@ const AboutMeSection = () => {
 
               {/* Shine overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 
-            group-hover:opacity-80 transition-opacity duration-700 pointer-events-none"></div>
+           group-hover:opacity-80 transition-opacity duration-700 pointer-events-none"></div>
             </div>
 
             {/* Mouse-follow floating image */}
@@ -325,8 +437,6 @@ const AboutMeSection = () => {
             )}
           </div>
         </div>
-
-
 
 
         {/* Right: Cinematic Text */}
@@ -525,65 +635,73 @@ const Contact = () => {
 };
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
   return (
-    <main className="bg-black min-h-screen text-slate-200 selection:bg-blue-500 selection:text-white font-sans">
-      <MinimalistGradient />
-      <NavBar />
+    <>
+      <AnimatePresence>
+        {loading && <LeafPreloader onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
 
-      {/* Hero Section */}
-      <Hero />
+      <main className="bg-black min-h-screen text-slate-200 selection:bg-blue-500 selection:text-white font-sans">
+        <MinimalistGradient />
+        <NavBar />
 
-      {/* ABOUT SECTION (REPLACES DUPLICATE EXPERIENCE) */}
-      <AboutMeSection />
+        {/* Hero Section */}
+        <Hero />
 
-      {/* Experience Timeline */}
-      <section id="experience" className="py-32 px-6 max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <span className="text-blue-500 font-mono tracking-widest text-sm uppercase">Career Trajectory</span>
-          <img
-            src={PORTFOLIO_DATA.personal.avatar}
-            alt="Profile"
-            className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 object-cover mx-auto my-6 border-slate-800"
-          />
-          <h2 className="text-4xl md:text-5xl font-bold text-white mt-3">Experience & Internships</h2>
-        </motion.div>
+        {/* ABOUT SECTION (REPLACES DUPLICATE EXPERIENCE) */}
+        <AboutMeSection />
 
-        <div className="relative">
-          {PORTFOLIO_DATA.experience.map((item, index) => (
-            <ExperienceCard key={item.id} item={item} index={index} />
-          ))}
-        </div>
-      </section>
+        {/* Experience Timeline */}
+        <section id="experience" className="py-32 px-6 max-w-6xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <span className="text-blue-500 font-mono tracking-widest text-sm uppercase">Career Trajectory</span>
+            <img
+              src={PORTFOLIO_DATA.personal.avatar}
+              alt="Profile"
+              className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 object-cover mx-auto my-6 border-slate-800"
+            />
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-3">Experience & Internships</h2>
+          </motion.div>
 
-      {/* Skills Marquee */}
-      <SkillsTicker />
+          <div className="relative">
+            {PORTFOLIO_DATA.experience.map((item, index) => (
+              <ExperienceCard key={item.id} item={item} index={index} />
+            ))}
+          </div>
+        </section>
 
-      {/* Projects Grid */}
-      <section id="projects" className="py-32 px-6 max-w-7xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <span className="text-blue-500 font-mono tracking-widest text-sm uppercase">Innovation Lab</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mt-3">Selected Works</h2>
-        </motion.div>
+        {/* Skills Marquee */}
+        <SkillsTicker />
 
-        <div className="flex flex-wrap gap-8 justify-center">
-          {PORTFOLIO_DATA.projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
-      </section>
+        {/* Projects Grid */}
+        <section id="projects" className="py-32 px-6 max-w-7xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <span className="text-blue-500 font-mono tracking-widest text-sm uppercase">Innovation Lab</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-3">Selected Works</h2>
+          </motion.div>
 
-      {/* Contact / Footer */}
-      <Contact />
-    </main>
+          <div className="flex flex-wrap gap-8 justify-center">
+            {PORTFOLIO_DATA.projects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </div>
+        </section>
+
+        {/* Contact / Footer */}
+        <Contact />
+      </main>
+    </>
   );
 }
