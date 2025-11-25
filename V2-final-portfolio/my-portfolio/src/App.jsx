@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Mail, ExternalLink, ChevronDown, Cpu, Shield, Activity, Terminal, Menu, X, Play, Leaf } from 'lucide-react';
+import {
+  Github, Linkedin, Mail, ChevronDown, Cpu, Shield,
+  Activity, Terminal, Menu, X, Play, Leaf,
+  Layout, Code2, Database, Palette
+} from 'lucide-react';
 
 // --- DATA SOURCE ---
 const PORTFOLIO_DATA = {
@@ -13,10 +17,13 @@ const PORTFOLIO_DATA = {
     email: "deepayankv8@gmail.com",
     github: "https://github.com/Deepayan-Thakur",
     linkedin: "https://www.linkedin.com/in/deepayan-thakur-5bb2aa215/",
+    instagram: "https://www.instagram.com/deepayan_thakur/",
     avatar: "av1-copy.png",
     avatar2: "av2.png",
     avatar3: "av3.png",
     avatar4: "av5.png",
+    av7: "av7.png",
+    av71: "av71.png",
     Deepayan_Thakur: "Deepayan_Thakur.png",
     about: "I am currently pursuing a B.Tech in CSE (AI & ML) at Sharda University with a strong focus on building scalable AI solutions. My journey involves hands-on experience with high-stakes organizations like DRDO, where I worked on cryptographic deep learning, and NHAI, where I streamlined national infrastructure data. Proficient in Python, Deep Learning, and Data Science, I am dedicated to solving real-world problems through innovation."
   },
@@ -77,10 +84,31 @@ const PORTFOLIO_DATA = {
       icon: <Terminal size={32} />
     }
   ],
-  skills: [
-    "Python", "Deep Learning", "CNNs", "Computer Vision",
-    "Java", "SQL", "Android Dev", "Data Science", "React"
-  ]
+  skills: {
+    // Core Programming
+    skill1: [
+      "Python", "Java", "JavaScript", "HTML", "CSS"
+    ],
+    skill2: [
+      // Machine Learning & Deep Learning
+      "Machine Learning", "Deep Learning", "CNNs", "RNNs", "LSTMs", "GRUs",
+      "Computer Vision", "NLP", "Time Series Forecasting", "Data Science",
+    ],
+    skill3: [
+      // Frameworks & Libraries
+      "PyTorch", "TensorFlow", "Keras", "OpenCV",
+      "Pandas", "NumPy", "Matplotlib", "Scikit-Learn",
+    ],
+    skill4: [
+      // Specialized Domains
+      "EEG/EMG Signal Processing", "BCI Systems",
+      "Trade Data Analysis", "HSN Code Analytics",
+    ],
+    skill5: [
+      // Tools & DevOps
+      "Git", "GitHub", "Vercel", "Docker",
+    ]
+  }
 };
 
 // --- LEAF CURTAIN PRELOADER ---
@@ -92,7 +120,7 @@ const LeafPreloader = ({ onComplete }) => {
     const timer = setTimeout(() => {
       setExit(true);
       // Allow animation to finish before removing component
-      setTimeout(onComplete, 1500); 
+      setTimeout(onComplete, 1500);
     }, 2500);
     return () => clearTimeout(timer);
   }, [onComplete]);
@@ -110,6 +138,7 @@ const LeafPreloader = ({ onComplete }) => {
     }));
   };
 
+  // Use refs to keep random values stable across re-renders
   const leavesLeft = useRef(generateLeaves(15)).current;
   const leavesRight = useRef(generateLeaves(15)).current;
 
@@ -129,8 +158,8 @@ const LeafPreloader = ({ onComplete }) => {
           <motion.div
             key={leaf.id}
             initial={{ opacity: 0, scale: 0 }}
-            animate={{ 
-              opacity: [0, 1, 1], 
+            animate={{
+              opacity: [0, 1, 1],
               scale: [0, leaf.scale, leaf.scale],
               rotate: [leaf.rotation, leaf.rotation + 10, leaf.rotation - 10, leaf.rotation]
             }}
@@ -155,8 +184,8 @@ const LeafPreloader = ({ onComplete }) => {
           <motion.div
             key={leaf.id}
             initial={{ opacity: 0, scale: 0 }}
-            animate={{ 
-              opacity: [0, 1, 1], 
+            animate={{
+              opacity: [0, 1, 1],
               scale: [0, leaf.scale, leaf.scale],
               rotate: [leaf.rotation, leaf.rotation - 10, leaf.rotation + 10, leaf.rotation]
             }}
@@ -170,25 +199,25 @@ const LeafPreloader = ({ onComplete }) => {
       </motion.div>
 
       {/* Center Text (Fades out before curtains open) */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={exit ? { opacity: 0, scale: 1.5 } : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
         className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
       >
         <div className="text-center">
-            <motion.div 
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mb-4"
-            >
-                <Leaf size={64} className="text-emerald-500 mx-auto animate-pulse" />
-            </motion.div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white tracking-widest font-mono">
-              I Welcome You
-            </h1>
-            <p className="text-emerald-500 mt-2 font-mono text-sm">To My Portfolio... 🍃</p>
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mb-4"
+          >
+            <Leaf size={64} className="text-emerald-500 mx-auto animate-pulse" />
+          </motion.div>
+          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-widest font-mono">
+            I Welcome You
+          </h1>
+          <p className="text-emerald-500 mt-2 font-mono text-sm">To My Portfolio... 🍃</p>
         </div>
       </motion.div>
     </div>
@@ -231,7 +260,7 @@ const NavBar = () => {
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/50 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <a href="#home" onClick={(e) => scrollToSection(e, '#home')} className="text-2xl font-bold text-white tracking-tighter">
+        <a href="#home" onClick={(e) => scrollToSection(e, '#home')} className="text-2xl font-bold text-white tracking-tighter cursor-pointer">
           DT<span className="text-blue-500">.</span>
         </a>
 
@@ -283,7 +312,6 @@ const MinimalistGradient = () => {
     <div className="fixed inset-0 z-0 pointer-events-none bg-black">
       {/* Main Radiant Gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-950/40 via-black to-black opacity-80" />
-
       {/* Subtle Blue Glow Center */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-900/10 blur-[120px] rounded-full" />
     </div>
@@ -313,7 +341,7 @@ const Hero = () => {
           <img
             src={PORTFOLIO_DATA.personal.avatar}
             alt="Profile"
-            className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 object-cover mx-auto"
+            className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-white/10 object-cover mx-auto bg-slate-900"
           />
         </motion.div>
 
@@ -404,34 +432,32 @@ const AboutMeSection = () => {
           >
 
             {/* Glow */}
-            <div className="absolute -inset-2 rounded-[30px] bg-gradient-to-br from-purple-500 to-blue-600 opacity-40 blur-xl 
-        group-hover:blur-2xl group-hover:opacity-70 transition-all duration-700"></div>
+            <div className="absolute -inset-2 rounded-[30px] bg-gradient-to-br from-purple-500 to-blue-600 opacity-40 blur-xl group-hover:blur-2xl group-hover:opacity-70 transition-all duration-700"></div>
 
             {/* Main Card */}
             <div
-              className="tilt-card relative rounded-[30px] border border-slate-800 shadow-2xl overflow-hidden 
-       transition-all duration-500 ease-[cubic-bezier(.215,.61,.355,1)]"
+              className="tilt-card relative rounded-[30px] border border-slate-800 shadow-2xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(.215,.61,.355,1)]"
             >
               <img
-                src={PORTFOLIO_DATA.personal.avatar3}
+                src={PORTFOLIO_DATA.personal.av7}
                 alt="About Me"
-                className="relative w-64 h-64 md:w-50 md:h-50 object-cover rounded-[30px]"
+                className="relative w-64 h-64 md:w-80 md:h-80 object-cover rounded-[30px] bg-slate-900"
               />
 
               {/* Shine overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 
-           group-hover:opacity-80 transition-opacity duration-700 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-700 pointer-events-none"></div>
             </div>
 
             {/* Mouse-follow floating image */}
             {showFloating && (
               <img
-                src={PORTFOLIO_DATA.personal.Deepayan_Thakur}
+                src={PORTFOLIO_DATA.personal.av71}
                 alt="floating-follow"
-                className="pointer-events-none w-55 h-55 rounded-xl border border-slate-700 shadow-2xl 
-          absolute z-50 transition-transform duration-75 ease-linear"
+                className="pointer-events-none w-55 h-55 shadow-2xl absolute z-50 transition-transform duration-75 ease-linear object-cover"
                 style={{
-                  transform: `translate(${mousePos.x + 20}px, ${mousePos.y - 120}px)`
+                  top: 0,
+                  left: 0,
+                  transform: `translate(${mousePos.x + 50}px, ${mousePos.y + 50}px)`
                 }}
               />
             )}
@@ -570,17 +596,24 @@ const ProjectCard = ({ project, index }) => {
 };
 
 const SkillsTicker = () => {
+  // Corrected to use PORTFOLIO_DATA
   return (
-    <div className="w-full overflow-hidden bg-slate-950/50 border-y border-slate-900 py-6 mb-20 backdrop-blur-sm">
+    <div className="w-full overflow-hidden bg-slate-950/50 border-y border-blue-900 py-6 mb-20 backdrop-blur-sm">
       <div className="flex whitespace-nowrap">
         <motion.div
           animate={{ x: [0, -1000] }}
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
           className="flex gap-16 px-8"
         >
-          {[...PORTFOLIO_DATA.skills, ...PORTFOLIO_DATA.skills, ...PORTFOLIO_DATA.skills].map((skill, i) => (
-            <span key={i} className="text-2xl font-bold text-slate-700 uppercase tracking-widest hover:text-blue-500 transition-colors cursor-default">
-              {skill}
+          {[...PORTFOLIO_DATA.skills.skill1, ...PORTFOLIO_DATA.skills.skill2].map((skill, i) => (
+            <span key={i} className="text-white text-2xl font-bold mx-8 uppercase tracking-wider items-center inline-flex">
+               {skill}
+            </span>
+          ))}
+          {/* Duplicate for seamless loop */}
+          {[...PORTFOLIO_DATA.skills.skill3, ...PORTFOLIO_DATA.skills.skill4].map((skill, i) => (
+            <span key={`dup-${i}`} className="text-white text-2xl font-bold mx-8 uppercase tracking-wider items-center inline-flex">
+               {skill}
             </span>
           ))}
         </motion.div>
@@ -588,6 +621,7 @@ const SkillsTicker = () => {
     </div>
   );
 };
+
 
 const Contact = () => {
   return (
@@ -603,7 +637,7 @@ const Contact = () => {
             href={PORTFOLIO_DATA.personal.github}
             target="_blank"
             rel="noreferrer"
-            className="p-4 rounded-full bg-slate-900 border border-slate-800 text-white hover:bg-blue-600 hover:border-blue-500 hover:scale-110 transition-all duration-300"
+            className="p-4 rounded-full bg-slate-900 border border-slate-800 text-white hover:bg-black hover:border-black hover:scale-110 transition-all duration-300"
           >
             <Github size={24} />
           </a>
@@ -617,19 +651,28 @@ const Contact = () => {
           </a>
           <a
             href={`mailto:${PORTFOLIO_DATA.personal.email}`}
-            className="p-4 rounded-full bg-slate-900 border border-slate-800 text-white hover:bg-blue-600 hover:border-blue-500 hover:scale-110 transition-all duration-300"
+            className="
+  p-4 rounded-full text-white border border-slate-800
+  bg-slate-900
+  hover:bg-gradient-to-r 
+  hover:from-[#4285F4] hover:via-[#34A853] hover:via-[#FBBC05] hover:to-[#EA4335]
+  hover:border-transparent
+  hover:scale-110 hover:brightness-110
+  transition-all duration-300
+"
           >
             <Mail size={24} />
           </a>
         </div>
-
+        
+        <h2 className="mt-10 text-4xl md:text-6xl font-bold text-white mb-8">Thank you for <span className="text-[#4285F4]">Your</span> Time</h2>
         <div className="mt-20 text-slate-600 text-sm">
           <p>© 2025 Deepayan Thakur. Designed with AI Intelligence.</p>
         </div>
       </div>
 
       {/* Decorative Glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-blue-600/10 blur-[100px] rounded-full"></div>
     </footer>
   );
 };
@@ -643,14 +686,14 @@ export default function App() {
         {loading && <LeafPreloader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
-      <main className="bg-black min-h-screen text-slate-200 selection:bg-blue-500 selection:text-white font-sans">
+      <main className="bg-black min-h-screen text-slate-200 selection:bg-blue-500 selection:text-white font-sans overflow-x-hidden">
         <MinimalistGradient />
         <NavBar />
 
         {/* Hero Section */}
         <Hero />
 
-        {/* ABOUT SECTION (REPLACES DUPLICATE EXPERIENCE) */}
+        {/* ABOUT SECTION */}
         <AboutMeSection />
 
         {/* Experience Timeline */}
@@ -663,9 +706,9 @@ export default function App() {
           >
             <span className="text-blue-500 font-mono tracking-widest text-sm uppercase">Career Trajectory</span>
             <img
-              src={PORTFOLIO_DATA.personal.avatar}
+              src={PORTFOLIO_DATA.personal.avatar2}
               alt="Profile"
-              className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 object-cover mx-auto my-6 border-slate-800"
+              className="relative w-34 h-34 rounded-full border-2 object-cover mx-auto my-6 border-slate-800 bg-slate-900"
             />
             <h2 className="text-4xl md:text-5xl font-bold text-white mt-3">Experience & Internships</h2>
           </motion.div>
