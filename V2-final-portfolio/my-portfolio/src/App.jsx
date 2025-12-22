@@ -22,7 +22,7 @@ const PORTFOLIO_DATA = {
     avatar2: "av2.png",
     avatar3: "av3.png",
     avatar4: "av5.png",
-    av7: "av72.png",
+    av7: "av73.png",
     av71: "av71.png",
     Deepayan_Thakur: "Deepayan_Thakur.png",
     about: "I am currently pursuing a B.Tech in CSE (AI & ML) at Sharda University with a strong focus on building scalable AI solutions. My journey involves hands-on experience with high-stakes organizations like DRDO, where I worked on cryptographic deep learning, and NHAI, where I streamlined national infrastructure data. Proficient in Python, Deep Learning, and Data Science, I am dedicated to solving real-world problems through innovation."
