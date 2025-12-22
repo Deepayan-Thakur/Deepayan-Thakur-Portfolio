@@ -8,7 +8,8 @@ A modern, responsive **single-page portfolio application** built to showcase per
 
 <br>
 <img width="1897" height="1079" alt="image" src="https://github.com/user-attachments/assets/0fa6a8ca-3c67-4bdd-af5a-616a14545b48" />
-<img width="1902" height="1079" alt="image" src="https://github.com/user-attachments/assets/effa970b-1d74-4a99-b2a4-e5bc9e054085" />
+<img width="1906" height="869" alt="image" src="https://github.com/user-attachments/assets/1bf08c86-59eb-40d6-905d-c3be4b2e8177" />
+
 <br>
 
 <em> 👉 https://deepayan-thakur-portfolio.vercel.app/ 👈
