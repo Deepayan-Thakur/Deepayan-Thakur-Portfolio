@@ -3,7 +3,7 @@
 <div align="center">
 
 A modern, responsive **single-page portfolio application** built to showcase personal projects, skills, and professional experience.
-
+## Use mouse hover on my name and see the magic 🪄
 🔗 <em>[**Live Website:**](https://github.com/Deepayan-Thakur)</em>
 
 <br>
