@@ -115,59 +115,6 @@ V2-final-portfolio/
 
 ---
 
-## ⚡ **Getting Started**
-
-Run the project locally using the following steps:
-
-### **📌 Prerequisites**
-- Node.js (v14+)
-- npm
-
----
-
-### **📥 Installation**
-
-#### **1️⃣ Clone the Repository**
-
-```bash
-git clone https://github.com/Deepayan-Thakur/Deepayan-Thakur-Portfolio.git
-cd Deepayan-Thakur-Portfolio
-```
-
-#### **2️⃣ Navigate to Project**
-
-```bash
-cd V2-final-portfolio/my-portfolio
-```
-
-#### **3️⃣ Install Dependencies**
-
-```bash
-npm install
-```
-
-#### **4️⃣ Start Development Server**
-
-```bash
-npm run dev
-```
-
-Open the URL shown in your terminal (typically **http://localhost:5173**).
-
----
-
-## 🏭 **Building for Production**
-
-To generate an optimized production build:
-
-```bash
-npm run build
-```
-
-Output will be generated inside the `dist/` folder — ready for deployment.
-
----
-
 ## 📬 **Contact**
 
 **👨‍💻 Developer:** Deepayan Thakur  
