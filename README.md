@@ -115,7 +115,7 @@ V2-final-portfolio/
 
 ---
 
-## 📬 **Contact**
+## 📬 **Made with** <img width="20" height="20" alt="image" src="https://github.com/user-attachments/assets/2d6b2bfe-af44-472e-9cd1-6334ff85b717" /> **by [Deepayan Thakur](https://github.com/Deepayan-Thakur)**
 
 **👨‍💻 Developer:** Deepayan Thakur  
 **🔗 GitHub:** [github.com/Deepayan-Thakur](https://github.com/Deepayan-Thakur)
