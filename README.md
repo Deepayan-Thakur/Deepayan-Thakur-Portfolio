@@ -47,47 +47,6 @@ This project is a **real-world proof of work**, not a template.
 
 ---
 
-## 🎥 Animated Preview
-
-> *(Replace with your own screen recording GIF)*
-
-![Portfolio Demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2RlbW8/giphy.gif)
-
----
-
-## 🏗 System Architecture
-
-```mermaid
-graph TD
-
-subgraph Local_Machine["💻 Local Developer Environment"]
-    IDE["📝 VS Code"]
-    Git["🔧 Git"]
-    ViteDev["⚡ Vite Dev Server (HMR)"]
-
-    IDE -->|Commit| Git
-    IDE -->|Save → Reload| ViteDev
-end
-
-subgraph Build_Pipeline["🛠 Build & Bundle"]
-    ViteBuild["📦 Vite Build Engine"]
-    Dist["📁 dist/ (Optimized Static Files)"]
-
-    ViteDev -.->|npm run build| ViteBuild
-    ViteBuild --> Dist
-end
-
-subgraph Production["☁️ Production"]
-    Vercel["▲ Vercel Hosting"]
-    Browser["🌍 User Browser"]
-end
-
-ViteDev -->|Live Preview| Browser
-Dist -->|Deploy| Vercel
-Vercel -->|Serve App| Browser
-
----
-
 ## 📂 Project Structure
 
 ```
@@ -142,15 +101,6 @@ npm run dev
 
 ---
 
-## 📈 Performance & Best Practices
-
-* Fully static SPA architecture
-* Optimized bundling via Vite
-* Mobile-first responsive design
-* Clean ESLint rules for maintainability
-* Lighthouse scores 95+
-
----
 
 ## 🔍 GitHub Search Optimization
 
@@ -160,12 +110,6 @@ npm run dev
 **Suggested Repository Description:**
 
 > High-performance React portfolio built with Vite and Tailwind CSS. Deployed on Vercel.
-
----
-
-## 👔 Recruiter Summary
-
-A production-ready **React single-page application** demonstrating modern frontend tooling, clean component architecture, and strong attention to performance and UX.
 
 ---
 
