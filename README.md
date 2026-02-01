@@ -20,7 +20,8 @@
 <br>
 
 <img width="1897" alt="Portfolio Preview 1" src="https://github.com/user-attachments/assets/0fa6a8ca-3c67-4bdd-af5a-616a14545b48" />
-<img width="1906" alt="Portfolio Preview 2" src="https://github.com/user-attachments/assets/1bf08c86-59eb-40d6-905d-c3be4b2e8177" />
+<img width="1178" height="706" alt="image" src="https://github.com/user-attachments/assets/5a8f0de7-23db-4dab-9718-5cc1a3c2eaea" />
+
 
 </div>
 
